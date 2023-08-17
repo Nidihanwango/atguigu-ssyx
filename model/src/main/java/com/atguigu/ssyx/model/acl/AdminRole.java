@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * <p>
@@ -18,6 +20,8 @@ import lombok.Data;
 @Data
 @ApiModel(description = "用户角色")
 @TableName("admin_role")
+@NoArgsConstructor
+@AllArgsConstructor
 public class AdminRole extends BaseEntity {
 	
 	private static final long serialVersionUID = 1L;
