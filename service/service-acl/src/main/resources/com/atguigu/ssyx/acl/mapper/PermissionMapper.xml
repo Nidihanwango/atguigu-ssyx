@@ -5,6 +5,6 @@
 <mapper namespace="com.atguigu.ssyx.acl.mapper.PermissionMapper">
 
     <select id="getChildrenIds" resultType="java.lang.Long">
-        SELECT id FROM permission WHERE pid = #{pid}
+        SELECT id FROM permission WHERE pid = #{pid} and is_deleted = 0
     </select>
 </mapper>

@@ -4,10 +4,13 @@ package com.atguigu.ssyx.model.acl;
 
 import com.atguigu.ssyx.model.base.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * <p>
@@ -20,6 +23,8 @@ import lombok.Data;
 @Data
 @ApiModel(description = "角色权限")
 @TableName("role_permission")
+@NoArgsConstructor
+@AllArgsConstructor
 public class RolePermission extends BaseEntity {
 	
 	private static final long serialVersionUID = 1L;
@@ -31,6 +36,5 @@ public class RolePermission extends BaseEntity {
 	@ApiModelProperty(value = "permissionId")
 	@TableField("permission_id")
 	private Long permissionId;
-
 }
 

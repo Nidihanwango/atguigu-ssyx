@@ -4,6 +4,7 @@ package com.atguigu.ssyx.model.acl;
 
 import com.atguigu.ssyx.model.base.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -61,6 +62,5 @@ public class Permission extends BaseEntity {
 	@ApiModelProperty(value = "是否选中")
 	@TableField(exist = false)
 	private boolean isSelect;
-
 }
 

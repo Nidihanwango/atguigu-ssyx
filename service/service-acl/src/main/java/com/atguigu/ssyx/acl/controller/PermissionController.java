@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/acl/permission")
-@Api(tags="菜单接口")
+@Api(tags="权限接口")
 @CrossOrigin
 public class PermissionController {
 
@@ -20,35 +20,35 @@ public class PermissionController {
     private PermissionService permissionService;
 
 
-    @ApiOperation("获取所有菜单")
+    @ApiOperation("获取所有权限")
     @GetMapping("")
     public Result list(){
         List<Permission> data = permissionService.getPermissionList();
         return Result.ok(data);
     }
 
-    @ApiOperation("新增一个菜单")
+    @ApiOperation("新增一个权限")
     @PostMapping("/save")
     public Result save(@RequestBody Permission permission){
         permissionService.save(permission);
         return Result.ok(null);
     }
 
-    @ApiOperation("删除一个菜单(包括子菜单)")
+    @ApiOperation("删除一个权限(包括子权限)")
     @DeleteMapping("/remove/{id}")
     public Result delete(@PathVariable Long id){
         permissionService.deletePermissionById(id);
         return Result.ok(null);
     }
 
-    @ApiOperation("更新一个菜单")
+    @ApiOperation("更新一个权限")
     @PutMapping("/update")
     public Result update(@RequestBody Permission permission){
         permissionService.updateById(permission);
         return Result.ok(null);
     }
 
-    @ApiOperation("查看某个角色管理的菜单")
+    @ApiOperation("查看某个角色管理的权限")
     @GetMapping("/toAssign/{roleId}")
     public Result getPermissionByRoleId(@PathVariable Long roleId){
         List<Permission> data = permissionService.getPermissionByRoleId(roleId);
@@ -57,8 +57,8 @@ public class PermissionController {
 
     @ApiOperation("给某个角色授权")
     @PostMapping("doAssign")
-    public Result doAssign(@RequestParam("roleId") Long roleId, @RequestParam("permissionId") Long permissionId){
-        permissionService.doAssign(roleId, permissionId);
+    public Result doAssign(@RequestParam("roleId") Long roleId, @RequestParam("permissionId") String permissionIds){
+        permissionService.doAssign(roleId, permissionIds);
         return Result.ok(null);
     }
 

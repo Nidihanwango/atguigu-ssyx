@@ -12,5 +12,5 @@ public interface PermissionService extends IService<Permission> {
 
     List<Permission> getPermissionByRoleId(Long roleId);
 
-    void doAssign(Long roleId, Long permissionId);
+    void doAssign(Long roleId, String permissionIds);
 }
