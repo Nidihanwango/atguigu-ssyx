@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -85,5 +86,81 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
             });
             skuPosterService.saveBatch(skuPosterList);
         }
+    }
+
+    @Override
+    public SkuInfoVo getSkuById(Long id) {
+        // 1.根据id获取sku基本信息
+        SkuInfo skuInfo = this.getById(id);
+        // 2.根据id获取sku属性信息
+        LambdaQueryWrapper<SkuAttrValue> attrValueWrapper = new LambdaQueryWrapper<>();
+        attrValueWrapper.eq(SkuAttrValue::getSkuId, id);
+        List<SkuAttrValue> attrValues = skuAttrValueService.list(attrValueWrapper);
+        // 3.根据id获取sku图片信息
+        LambdaQueryWrapper<SkuImage> skuImageWrapper = new LambdaQueryWrapper<>();
+        skuImageWrapper.eq(SkuImage::getSkuId, id);
+        List<SkuImage> skuImages = skuImageService.list(skuImageWrapper);
+        // 4.根据id获取sku海报信息
+        LambdaQueryWrapper<SkuPoster> skuPosterWrapper = new LambdaQueryWrapper<>();
+        skuPosterWrapper.eq(SkuPoster::getSkuId, id);
+        List<SkuPoster> skuPosters = skuPosterService.list(skuPosterWrapper);
+        // 5.封装数据返回结果
+        SkuInfoVo skuInfoVo = new SkuInfoVo();
+        BeanUtils.copyProperties(skuInfo, skuInfoVo);
+        skuInfoVo.setSkuAttrValueList(attrValues);
+        skuInfoVo.setSkuImagesList(skuImages);
+        skuInfoVo.setSkuPosterList(skuPosters);
+        return skuInfoVo;
+    }
+
+    @Override
+    public void updateSku(SkuInfoVo skuInfoVo) {
+        // 1.修改sku基本属性
+        SkuInfo skuInfo = new SkuInfo();
+        BeanUtils.copyProperties(skuInfoVo, skuInfo);
+        this.updateById(skuInfo);
+        // 2.修改sku平台属性
+        // 2.1 删除原有属性
+        LambdaQueryWrapper<SkuAttrValue> skuAttrValueWrapper = new LambdaQueryWrapper<>();
+        skuAttrValueWrapper.eq(SkuAttrValue::getSkuId, skuInfoVo.getId());
+        skuAttrValueService.remove(skuAttrValueWrapper);
+        // 2.2 添加新数据
+        skuAttrValueService.saveBatch(skuInfoVo.getSkuAttrValueList());
+        // 3.修改sku图片信息
+        // 3.1 删除原有数据
+        LambdaQueryWrapper<SkuImage> skuImageWrapper = new LambdaQueryWrapper<>();
+        skuImageWrapper.eq(SkuImage::getSkuId, skuInfoVo.getId());
+        skuImageService.remove(skuImageWrapper);
+        // 3.2 添加新数据
+        skuImageService.saveBatch(skuInfoVo.getSkuImagesList());
+        // 4.修改sku海报信息
+        LambdaQueryWrapper<SkuPoster> skuPosterWrapper = new LambdaQueryWrapper<>();
+        skuPosterWrapper.eq(SkuPoster::getSkuId, skuInfoVo.getId());
+        skuPosterService.remove(skuPosterWrapper);
+        skuPosterService.saveBatch(skuInfoVo.getSkuPosterList());
+    }
+
+    @Override
+    public void publishSku(Long id, Integer status) {
+        SkuInfo skuInfo = new SkuInfo();
+        skuInfo.setId(id);
+        skuInfo.setPublishStatus(status);
+        this.updateById(skuInfo);
+    }
+
+    @Override
+    public void checkSku(Long id, Integer status) {
+        SkuInfo skuInfo = new SkuInfo();
+        skuInfo.setId(id);
+        skuInfo.setCheckStatus(status);
+        this.updateById(skuInfo);
+    }
+
+    @Override
+    public void isNewPerson(Long id, Integer status) {
+        SkuInfo skuInfo = new SkuInfo();
+        skuInfo.setId(id);
+        skuInfo.setIsNewPerson(status);
+        this.updateById(skuInfo);
     }
 }

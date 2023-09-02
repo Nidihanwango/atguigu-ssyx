@@ -19,4 +19,14 @@ public interface SkuInfoService extends IService<SkuInfo> {
     Page<SkuInfo> getPageList(Page<SkuInfo> pageParam, SkuInfoQueryVo skuInfoQueryVo);
 
     void insertSkuinfo(SkuInfoVo skuInfoVo);
+
+    SkuInfoVo getSkuById(Long id);
+
+    void updateSku(SkuInfoVo skuInfoVo);
+
+    void publishSku(Long id, Integer status);
+
+    void checkSku(Long id, Integer status);
+
+    void isNewPerson(Long id, Integer status);
 }
