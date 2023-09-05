@@ -6,6 +6,8 @@ import com.atguigu.ssyx.vo.product.SkuInfoVo;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * sku信息 服务类
@@ -29,4 +31,6 @@ public interface SkuInfoService extends IService<SkuInfo> {
     void checkSku(Long id, Integer status);
 
     void isNewPerson(Long id, Integer status);
+
+    List<SkuInfo> getSkuByKeyword(String keyword);
 }

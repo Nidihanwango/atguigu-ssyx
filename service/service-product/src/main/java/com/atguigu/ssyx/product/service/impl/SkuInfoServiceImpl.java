@@ -1,5 +1,7 @@
 package com.atguigu.ssyx.product.service.impl;
 
+import com.atguigu.ssyx.common.constant.MQConst;
+import com.atguigu.ssyx.common.service.RabbitService;
 import com.atguigu.ssyx.model.product.SkuAttrValue;
 import com.atguigu.ssyx.model.product.SkuImage;
 import com.atguigu.ssyx.model.product.SkuInfo;
@@ -16,7 +18,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -40,6 +41,8 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
     private SkuAttrValueService skuAttrValueService;
     @Autowired
     private SkuImageService skuImageService;
+    @Autowired
+    private RabbitService rabbitService;
 
     @Override
     public Page<SkuInfo> getPageList(Page<SkuInfo> pageParam, SkuInfoQueryVo skuInfoQueryVo) {
@@ -146,6 +149,13 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
         skuInfo.setId(id);
         skuInfo.setPublishStatus(status);
         this.updateById(skuInfo);
+        if (status == 1) {
+            // 上架商品,发送消息到mq
+            rabbitService.sendMessage(MQConst.EXCHANGE_GOODS_DIRECT, MQConst.ROUTING_GOODS_UPPER, id);
+        } else {
+            // 下架商品,发送消息到mq
+            rabbitService.sendMessage(MQConst.EXCHANGE_GOODS_DIRECT, MQConst.ROUTING_GOODS_LOWER, id);
+        }
     }
 
     @Override
@@ -162,5 +172,10 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
         skuInfo.setId(id);
         skuInfo.setIsNewPerson(status);
         this.updateById(skuInfo);
+    }
+
+    @Override
+    public List<SkuInfo> getSkuByKeyword(String keyword) {
+        return this.list(new LambdaQueryWrapper<SkuInfo>().like(SkuInfo::getSkuName, keyword));
     }
 }

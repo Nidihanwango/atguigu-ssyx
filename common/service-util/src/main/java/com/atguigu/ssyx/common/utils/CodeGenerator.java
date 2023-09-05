@@ -12,7 +12,7 @@ public class CodeGenerator {
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        gc.setOutputDir("D:/IdeaProject/guigu-ssyx-parent/service/service-product/src/main/java");
+        gc.setOutputDir("D:/IdeaProject/guigu-ssyx-parent/service/service-activity/src/main/java");
         gc.setServiceName("%sService");
         gc.setAuthor("syh");
         gc.setOpen(false);
@@ -21,7 +21,7 @@ public class CodeGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/shequ-product?serverTimezone=GMT%2B8&useSSL=false");
+        dsc.setUrl("jdbc:mysql://localhost:3306/shequ-activity?serverTimezone=GMT%2B8&useSSL=false");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("123123");
@@ -31,7 +31,7 @@ public class CodeGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setParent("com.atguigu.ssyx");
-        pc.setModuleName("product");
+        pc.setModuleName("activity");
         pc.setController("controller");
         pc.setService("service");
         pc.setMapper("mapper");
@@ -39,7 +39,7 @@ public class CodeGenerator {
 
         // 策略配置
         StrategyConfig strategy = new StrategyConfig();
-        strategy.setInclude("attr","attr_group","category","comment","comment_replay","sku_attr_value","sku_image","sku_info","sku_poster","sku_stock_history");
+        strategy.setInclude("activity_info","activity_rule","activity_sku","coupon_info","coupon_info_1","coupon_range","coupon_use");
         strategy.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);//数据库表字段映射到实体的命名策略
         strategy.setEntityLombokModel(true); // lombok 模型 @Accessors(chain = true) setter链式操作

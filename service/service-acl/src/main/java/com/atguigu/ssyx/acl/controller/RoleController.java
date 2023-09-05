@@ -9,11 +9,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @Api(tags = "角色接口")
 @RestController
-@CrossOrigin
 @RequestMapping("/admin/acl/role")
 public class RoleController {
 
@@ -22,14 +22,14 @@ public class RoleController {
 
     @ApiOperation("角色列表,分页条件查询")
     @GetMapping("/{page}/{limit}")
-    public Result list(@PathVariable("page") Integer page, @PathVariable("limit") Integer limit, RoleQueryVo vo){
+    public Result list(@PathVariable("page") Integer page, @PathVariable("limit") Integer limit, RoleQueryVo vo) {
         IPage<Role> pageModel = roleService.pageConditionQuery(page, limit, vo);
         return Result.ok(pageModel);
     }
 
     @ApiOperation("保存一个新角色")
     @PostMapping("/save")
-    public Result save(@RequestBody Role role){
+    public Result save(@RequestBody Role role) {
         boolean isSuccess = roleService.save(role);
         return isSuccess ? Result.ok(null) : Result.fail();
     }
@@ -50,14 +50,14 @@ public class RoleController {
 
     @ApiOperation("删除某个角色")
     @DeleteMapping("/remove/{id}")
-    public Result delete(@PathVariable Long id){
+    public Result delete(@PathVariable Long id) {
         boolean isSuccess = roleService.removeById(id);
         return isSuccess ? Result.ok(null) : Result.fail();
     }
 
     @ApiOperation("批量删除多个角色")
     @DeleteMapping("/batchRemove")
-    public Result batchRemove(@RequestBody List<Long> ids){
+    public Result batchRemove(@RequestBody List<Long> ids) {
         boolean isSuccess = roleService.removeByIds(ids);
         return isSuccess ? Result.ok(null) : Result.fail();
     }

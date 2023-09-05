@@ -34,7 +34,7 @@ public class AclCommonTest {
     }
     @Test
     public void test03(){
-        String s = "`attr``attr_group``base_category_trademark``category``comment``comment_replay``mq_repeat_record``region_ware``sku_attr_value``sku_detail``sku_image``sku_info``sku_poster``sku_stock_history``ware`";
+        String s = "`activity_info``activity_rule``activity_sku``coupon_info``coupon_info_1``coupon_range``coupon_use`";
         String s1 = s.replaceAll("``", "\",\"");
         System.out.println(s1.replaceAll("`", "\""));
     }

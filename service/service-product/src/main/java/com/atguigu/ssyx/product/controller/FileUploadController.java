@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 @Api("文件上传接口")
-@CrossOrigin
+
 @RequestMapping("/admin/product")
 @RestController
 public class FileUploadController {

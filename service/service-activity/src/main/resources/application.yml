@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: service-activity
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      server-addr: localhost:8848
+    inetutils:
+      ignored-interfaces: 'VMware Virtual Ethernet Adapter for VMnet1,VMware Virtual Ethernet Adapter for VMnet8,Netease UU TAP-Win32 Adapter V9.21'

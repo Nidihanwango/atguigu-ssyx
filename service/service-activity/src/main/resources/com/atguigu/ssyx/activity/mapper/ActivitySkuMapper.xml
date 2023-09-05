@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.ssyx.activity.mapper.ActivitySkuMapper">
+
+
+    <select id="getSkuIdsInActivity" resultType="java.lang.Long">
+        SELECT
+            sku_id
+        FROM
+            activity_sku a
+        JOIN
+            activity_info b
+        ON
+            a.activity_id = b.id AND a.is_deleted = 0 AND b.is_deleted = 0
+        <where>
+            <foreach collection="skuIds" open="a.sku_id in (" separator=","
+                     close=") AND NOW() BETWEEN b.start_time AND b.end_time" item="item">
+                #{item}
+            </foreach>
+        </where>
+    </select>
+</mapper>
