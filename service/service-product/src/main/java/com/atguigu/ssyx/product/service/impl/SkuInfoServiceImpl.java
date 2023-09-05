@@ -1,5 +1,7 @@
 package com.atguigu.ssyx.product.service.impl;
 
+import com.atguigu.ssyx.common.constant.MQConst;
+import com.atguigu.ssyx.common.service.RabbitService;
 import com.atguigu.ssyx.model.product.SkuAttrValue;
 import com.atguigu.ssyx.model.product.SkuImage;
 import com.atguigu.ssyx.model.product.SkuInfo;
@@ -40,6 +42,8 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
     private SkuAttrValueService skuAttrValueService;
     @Autowired
     private SkuImageService skuImageService;
+    @Autowired
+    private RabbitService rabbitService;
 
     @Override
     public Page<SkuInfo> getPageList(Page<SkuInfo> pageParam, SkuInfoQueryVo skuInfoQueryVo) {
@@ -146,6 +150,13 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
         skuInfo.setId(id);
         skuInfo.setPublishStatus(status);
         this.updateById(skuInfo);
+        if (status == 1) {
+            // 上架商品,发送消息到mq
+            rabbitService.sendMessage(MQConst.EXCHANGE_GOODS_DIRECT, MQConst.ROUTING_GOODS_UPPER, id);
+        } else {
+            // 下架商品,发送消息到mq
+            rabbitService.sendMessage(MQConst.EXCHANGE_GOODS_DIRECT, MQConst.ROUTING_GOODS_LOWER, id);
+        }
     }
 
     @Override

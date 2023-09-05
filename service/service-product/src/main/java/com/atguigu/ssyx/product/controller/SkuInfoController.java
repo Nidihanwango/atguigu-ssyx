@@ -1,7 +1,9 @@
 package com.atguigu.ssyx.product.controller;
 
 
+import com.atguigu.ssyx.common.constant.MQConst;
 import com.atguigu.ssyx.common.result.Result;
+import com.atguigu.ssyx.common.service.RabbitService;
 import com.atguigu.ssyx.model.product.SkuInfo;
 import com.atguigu.ssyx.product.service.SkuInfoService;
 import com.atguigu.ssyx.vo.product.SkuInfoQueryVo;
@@ -30,6 +32,8 @@ public class SkuInfoController {
 
     @Autowired
     private SkuInfoService skuInfoService;
+    @Autowired
+    private RabbitService rabbitService;
 
     @ApiOperation("分页条件查询")
     @GetMapping("{curPage}/{size}")
@@ -64,6 +68,7 @@ public class SkuInfoController {
     @DeleteMapping("remove/{id}")
     public Result remove(@PathVariable Long id) {
         skuInfoService.removeById(id);
+        rabbitService.sendMessage(MQConst.EXCHANGE_GOODS_DIRECT, MQConst.ROUTING_GOODS_LOWER, id);
         return Result.ok(null);
     }
 
