@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: service-user
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    inetutils:
+      ignored-interfaces: 'VMware Virtual Ethernet Adapter for VMnet1,VMware Virtual Ethernet Adapter for VMnet8,Netease UU TAP-Win32 Adapter V9.21'
+wx:
+  open:
+    # 小程序微信公众平台appId
+    app_id: wx0c5f408fcc7567c5
+    # 小程序微信公众平台api秘钥
+    app_secret: 7d445a58e9d926306600232a0e0f41f3
