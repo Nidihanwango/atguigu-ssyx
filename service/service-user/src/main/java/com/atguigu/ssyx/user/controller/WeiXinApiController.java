@@ -2,15 +2,12 @@ package com.atguigu.ssyx.user.controller;
 
 
 import com.atguigu.ssyx.common.result.Result;
+import com.atguigu.ssyx.model.user.User;
 import com.atguigu.ssyx.user.service.WeiXinApiService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -27,6 +24,13 @@ public class WeiXinApiController {
     public Result wxLogin(@PathVariable String code){
         Map<String, Object> model = weiXinApiService.wxLogin(code);
         return Result.ok(model);
+    }
+
+    @PostMapping("/auth/updateUser")
+    @ApiOperation(value = "更新用户昵称与头像")
+    public Result updateUser(@RequestBody User user) {
+        weiXinApiService.updateUser(user);
+        return Result.ok(null);
     }
 }
 

@@ -19,4 +19,5 @@ public interface CategoryService extends IService<Category> {
     Page<Category> getPageList(Page<Category> pageParam, String keyword);
 
     List<Category> findAllList();
+
 }

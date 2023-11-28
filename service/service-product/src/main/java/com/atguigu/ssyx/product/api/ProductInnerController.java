@@ -50,4 +50,16 @@ public class ProductInnerController {
     List<Category> getCategoryList(@RequestBody List<Long> rangeIdList){
         return categoryService.listByIds(rangeIdList);
     }
+
+    @ApiOperation("获取所有分类信息")
+    @GetMapping("/getAllCategoryList")
+    List<Category> getAllCategoryList(){
+        return categoryService.list();
+    }
+
+    @ApiOperation("获取新人专享商品")
+    @GetMapping("/getNewPersonSku")
+    List<SkuInfo> getNewPersonSku(){
+        return skuInfoService.getNewPersonSku();
+    }
 }

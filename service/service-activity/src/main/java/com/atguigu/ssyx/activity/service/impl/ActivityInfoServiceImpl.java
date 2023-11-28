@@ -95,6 +95,7 @@ public class ActivityInfoServiceImpl extends ServiceImpl<ActivityInfoMapper, Act
         });
     }
 
+    // 根据关键词获取sku信息
     @Override
     public List<SkuInfo> findSkuInfoByKeyword(String keyword) {
         // 1.远程调用product模块根据关键字查询sku
@@ -111,6 +112,18 @@ public class ActivityInfoServiceImpl extends ServiceImpl<ActivityInfoMapper, Act
             if (!inActivitySkuIds.contains(skuInfo.getId())) {
                 result.add(skuInfo);
             }
+        }
+        return result;
+    }
+
+    // 根据skuId列表获取营销活动信息
+    @Override
+    public Map<Long, List<String>> findActivity(List<Long> skuIdList) {
+        Map<Long, List<String>> result = new HashMap<>();
+        for (Long skuId : skuIdList) {
+            // 根据skuId查询活动名
+            List<String> activityIdsBySkuId = activitySkuMapper.getActivityBySkuId(skuId);
+            result.put(skuId, activityIdsBySkuId);
         }
         return result;
     }

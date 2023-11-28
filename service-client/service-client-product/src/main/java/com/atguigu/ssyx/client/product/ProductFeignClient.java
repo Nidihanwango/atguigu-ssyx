@@ -1,5 +1,6 @@
 package com.atguigu.ssyx.client.product;
 
+import com.atguigu.ssyx.common.config.FeignConfig;
 import com.atguigu.ssyx.model.product.Category;
 import com.atguigu.ssyx.model.product.SkuInfo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient("service-product")
+@FeignClient(value = "service-product", configuration = {FeignConfig.class})
 public interface ProductFeignClient {
 
     @GetMapping("/api/product/inner/getCategory/{categoryId}")
@@ -23,4 +24,12 @@ public interface ProductFeignClient {
     List<SkuInfo> getSkuInfoList(@RequestBody List<Long> skuIds);
     @PostMapping("/api/product/inner/getCategoryList")
     List<Category> getCategoryList(@RequestBody List<Long> rangeIdList);
+
+    // 获取商品分类
+    @GetMapping("/api/product/inner/getNewPersonSku")
+    List<SkuInfo> getNewPersonSku();
+
+    // 获取新人专享sku
+    @GetMapping("/api/product/inner/getAllCategoryList")
+    List<Category> getAllCategoryList();
 }

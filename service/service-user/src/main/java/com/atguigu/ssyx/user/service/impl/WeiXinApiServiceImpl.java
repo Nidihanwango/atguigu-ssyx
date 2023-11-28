@@ -1,6 +1,7 @@
 package com.atguigu.ssyx.user.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.atguigu.ssyx.common.auth.AuthContextHolder;
 import com.atguigu.ssyx.common.constant.RedisConst;
 import com.atguigu.ssyx.common.exception.SsyxException;
 import com.atguigu.ssyx.common.result.ResultCodeEnum;
@@ -55,7 +56,7 @@ public class WeiXinApiServiceImpl implements WeiXinApiService {
                 .append("&grant_type=authorization_code");
         String url = String.format(sb.toString(), ConstantPropertiesUtil.WX_OPEN_APP_ID, ConstantPropertiesUtil.WX_OPEN_APP_SECRET, code);
         String result = null;
-        try{
+        try {
             result = HttpClientUtils.get(url);
         } catch (Exception e) {
             throw new SsyxException(ResultCodeEnum.FETCH_ACCESSTOKEN_FAILD);
@@ -95,6 +96,15 @@ public class WeiXinApiServiceImpl implements WeiXinApiService {
         return map;
     }
 
+    @Override
+    public void updateUser(User user) {
+        User user1 = userMapper.selectById(AuthContextHolder.getUserId());
+        //把昵称更新为微信用户
+        user1.setNickName(user.getNickName().replaceAll("[ue000-uefff]", "*"));
+        user1.setPhotoUrl(user.getPhotoUrl());
+        userMapper.updateById(user1);
+    }
+
     private UserLoginVo getUserLoginVo(Long userId) {
         UserLoginVo userLoginVo = new UserLoginVo();
         User user = userMapper.selectById(userId);
@@ -105,7 +115,7 @@ public class WeiXinApiServiceImpl implements WeiXinApiService {
         userLoginVo.setIsNew(user.getIsNew());
 
         //如果是团长获取当前前团长id与对应的仓库id
-        if(user.getUserType() == UserType.LEADER) {
+        if (user.getUserType() == UserType.LEADER) {
 //            LambdaQueryWrapper<Leader> queryWrapper = new LambdaQueryWrapper<>();
 //            queryWrapper.eq(Leader::getUserId, userId);
 //            queryWrapper.eq(Leader::getCheckStatus, 1);
@@ -121,7 +131,7 @@ public class WeiXinApiServiceImpl implements WeiXinApiService {
             queryWrapper.eq(UserDelivery::getUserId, userId);
             queryWrapper.eq(UserDelivery::getIsDefault, 1);
             UserDelivery userDelivery = userDeliveryMapper.selectOne(queryWrapper);
-            if(null != userDelivery) {
+            if (null != userDelivery) {
                 userLoginVo.setLeaderId(userDelivery.getLeaderId());
                 userLoginVo.setWareId(userDelivery.getWareId());
             } else {
@@ -132,7 +142,8 @@ public class WeiXinApiServiceImpl implements WeiXinApiService {
         return userLoginVo;
     }
 
-    private LeaderAddressVo getLeaderAddressVoByUserId(Long id) {
+    @Override
+    public LeaderAddressVo getLeaderAddressVoByUserId(Long id) {
         UserDelivery userDelivery = userDeliveryMapper.selectOne(new LambdaQueryWrapper<UserDelivery>().eq(UserDelivery::getUserId, id).eq(UserDelivery::getIsDefault, 1));
         if (userDelivery == null) {
             return null;

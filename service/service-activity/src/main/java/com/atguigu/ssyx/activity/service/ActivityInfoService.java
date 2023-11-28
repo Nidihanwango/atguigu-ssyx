@@ -27,4 +27,6 @@ public interface ActivityInfoService extends IService<ActivityInfo> {
     void saveActivityRule(ActivityRuleVo activityRuleVo);
 
     List<SkuInfo> findSkuInfoByKeyword(String keyword);
+    //根据skuId获取对应的营销活动名
+    Map<Long, List<String>> findActivity(List<Long> skuIdList);
 }

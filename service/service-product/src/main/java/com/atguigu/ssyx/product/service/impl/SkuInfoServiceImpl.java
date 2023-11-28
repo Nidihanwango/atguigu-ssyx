@@ -178,4 +178,13 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
     public List<SkuInfo> getSkuByKeyword(String keyword) {
         return this.list(new LambdaQueryWrapper<SkuInfo>().like(SkuInfo::getSkuName, keyword));
     }
+
+    @Override
+    // 获取新人专享商品信息
+    public List<SkuInfo> getNewPersonSku() {
+        LambdaQueryWrapper<SkuInfo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SkuInfo::getIsNewPerson, 1);
+        List<SkuInfo> list = this.list(wrapper);
+        return list;
+    }
 }

@@ -47,12 +47,12 @@ spring:
           predicates:
             - Path=/*/search/**
 
-        - id: service-home
-          uri: lb://service-home
-          predicates:
-            - Path=/*/home/**
-
         - id: service-cart
           uri: lb://service-cart
           predicates:
             - Path=/*/cart/**
+
+        - id: service-index
+          uri: lb://service-index
+          predicates:
+            - Path=/*/home/**

@@ -5,55 +5,40 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.atguigu</groupId>
-        <artifactId>guigu-ssyx-parent</artifactId>
+        <artifactId>service</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>service-client</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>service-client-product</module>
-        <module>service-client-user</module>
-        <module>service-client-search</module>
-        <module>service-client-activity</module>
-    </modules>
+    <artifactId>service-index</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.atguigu</groupId>
-            <artifactId>common-util</artifactId>
+            <artifactId>service-client-product</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>provided </scope>
         </dependency>
 
         <dependency>
             <groupId>com.atguigu</groupId>
-            <artifactId>model</artifactId>
+            <artifactId>service-client-user</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>provided </scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <scope>provided </scope>
-        </dependency>
-
-        <!-- 服务调用feign -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <scope>provided </scope>
         </dependency>
 
         <dependency>
             <groupId>com.atguigu</groupId>
-            <artifactId>service-util</artifactId>
+            <artifactId>service-client-search</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.atguigu</groupId>
+            <artifactId>service-client-activity</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

@@ -19,4 +19,6 @@ import java.util.List;
 public interface ActivitySkuMapper extends BaseMapper<ActivitySku> {
 
     List<Long> getSkuIdsInActivity(@Param("skuIds") List<Long> skuIds);
+
+    List<String> getActivityBySkuId(@Param("skuId") Long skuId);
 }

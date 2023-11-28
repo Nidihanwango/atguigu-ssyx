@@ -19,4 +19,17 @@
             </foreach>
         </where>
     </select>
+
+    <select id="getActivityBySkuId" resultType="java.lang.String">
+        SELECT
+            info.activity_name
+        FROM
+            activity_sku sku
+        LEFT JOIN
+            activity_info info
+        ON
+            sku.activity_id = info.id
+        WHERE
+            sku.sku_id = #{skuId}
+    </select>
 </mapper>

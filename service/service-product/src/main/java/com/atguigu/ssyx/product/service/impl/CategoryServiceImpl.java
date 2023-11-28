@@ -1,6 +1,5 @@
 package com.atguigu.ssyx.product.service.impl;
 
-import com.atguigu.ssyx.common.exception.SsyxException;
 import com.atguigu.ssyx.model.product.Category;
 import com.atguigu.ssyx.product.mapper.CategoryMapper;
 import com.atguigu.ssyx.product.service.CategoryService;

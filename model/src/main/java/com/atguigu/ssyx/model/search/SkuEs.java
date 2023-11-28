@@ -11,7 +11,7 @@ import java.util.List;
 @Document(indexName = "skues" ,shards = 3,replicas = 1)
 public class SkuEs {
 
-    // 商品Id= skuId
+    // 商品Id = skuId
     @Id
     private Long id;
 

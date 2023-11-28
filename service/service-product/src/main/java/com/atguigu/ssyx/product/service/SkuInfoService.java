@@ -33,4 +33,6 @@ public interface SkuInfoService extends IService<SkuInfo> {
     void isNewPerson(Long id, Integer status);
 
     List<SkuInfo> getSkuByKeyword(String keyword);
+    // 获取新人专享商品信息
+    List<SkuInfo> getNewPersonSku();
 }
