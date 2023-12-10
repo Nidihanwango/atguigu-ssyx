@@ -5,6 +5,7 @@ import com.atguigu.ssyx.activity.mapper.ActivityRuleMapper;
 import com.atguigu.ssyx.activity.mapper.ActivitySkuMapper;
 import com.atguigu.ssyx.activity.service.ActivityInfoService;
 import com.atguigu.ssyx.client.product.ProductFeignClient;
+import com.atguigu.ssyx.enums.ActivityType;
 import com.atguigu.ssyx.model.activity.ActivityInfo;
 import com.atguigu.ssyx.model.activity.ActivityRule;
 import com.atguigu.ssyx.model.activity.ActivitySku;
@@ -122,9 +123,37 @@ public class ActivityInfoServiceImpl extends ServiceImpl<ActivityInfoMapper, Act
         Map<Long, List<String>> result = new HashMap<>();
         for (Long skuId : skuIdList) {
             // 根据skuId查询活动名
-            List<String> activityIdsBySkuId = activitySkuMapper.getActivityBySkuId(skuId);
-            result.put(skuId, activityIdsBySkuId);
+            List<ActivityRule> activityRuleList = activitySkuMapper.getActivityBySkuId(skuId);
+            if (!CollectionUtils.isEmpty(activityRuleList)) {
+                List<String> ruleList = new ArrayList<>();
+                for (ActivityRule activityRule : activityRuleList) {
+                    ruleList.add(getRuleDesc(activityRule));
+                }
+                result.put(skuId, ruleList);
+            }
         }
         return result;
+    }
+
+    //构造规则名称的方法
+    private String getRuleDesc(ActivityRule activityRule) {
+        ActivityType activityType = activityRule.getActivityType();
+        StringBuilder ruleDesc = new StringBuilder();
+        if (activityType == ActivityType.FULL_REDUCTION) {
+            ruleDesc
+                    .append("满")
+                    .append(activityRule.getConditionAmount())
+                    .append("元减")
+                    .append(activityRule.getBenefitAmount())
+                    .append("元");
+        } else {
+            ruleDesc
+                    .append("满")
+                    .append(activityRule.getConditionNum())
+                    .append("元打")
+                    .append(activityRule.getBenefitDiscount())
+                    .append("折");
+        }
+        return ruleDesc.toString();
     }
 }

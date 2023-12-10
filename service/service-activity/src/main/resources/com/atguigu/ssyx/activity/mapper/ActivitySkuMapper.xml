@@ -20,16 +20,22 @@
         </where>
     </select>
 
-    <select id="getActivityBySkuId" resultType="java.lang.String">
+    <select id="getActivityBySkuId" resultType="com.atguigu.ssyx.model.activity.ActivityRule">
         SELECT
-            info.activity_name
+            rule.id, rule.activity_id, rule.activity_type, rule.condition_amount, rule.condition_num, rule.benefit_amount,benefit_discount
         FROM
-            activity_sku sku
-        LEFT JOIN
-            activity_info info
+            `activity_info` info
+        JOIN
+            `activity_sku` sku
         ON
-            sku.activity_id = info.id
+            info.id = sku.activity_id
+        JOIN
+            `activity_rule` rule
+        ON
+            info.id = rule.activity_id
         WHERE
-            sku.sku_id = #{skuId}
+            sku.is_deleted = 0 AND sku.sku_id = #{skuId} AND NOW() BETWEEN info.start_time AND info.end_time
+        ORDER BY
+            rule.condition_amount DESC, rule.condition_num DESC
     </select>
 </mapper>

@@ -64,4 +64,9 @@ public class IndexServiceImpl implements IndexService {
         return result;
     }
 
+    @Override
+    public List<Category> getAllCategory() {
+        return productFeignClient.getAllCategoryList();
+    }
+
 }

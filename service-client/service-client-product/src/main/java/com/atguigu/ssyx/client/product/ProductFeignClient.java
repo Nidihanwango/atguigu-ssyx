@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 @FeignClient(value = "service-product", configuration = {FeignConfig.class})
+// todo 多余配置 FeignConfig
 public interface ProductFeignClient {
 
     @GetMapping("/api/product/inner/getCategory/{categoryId}")

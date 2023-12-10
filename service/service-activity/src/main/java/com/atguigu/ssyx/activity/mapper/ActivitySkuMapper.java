@@ -1,5 +1,6 @@
 package com.atguigu.ssyx.activity.mapper;
 
+import com.atguigu.ssyx.model.activity.ActivityRule;
 import com.atguigu.ssyx.model.activity.ActivitySku;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -20,5 +21,5 @@ public interface ActivitySkuMapper extends BaseMapper<ActivitySku> {
 
     List<Long> getSkuIdsInActivity(@Param("skuIds") List<Long> skuIds);
 
-    List<String> getActivityBySkuId(@Param("skuId") Long skuId);
+    List<ActivityRule> getActivityBySkuId(@Param("skuId") Long skuId);
 }
