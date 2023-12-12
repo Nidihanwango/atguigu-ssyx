@@ -15,4 +15,6 @@ public interface SkuService {
     List<SkuEs> findHotSkuList();
     // 获取相关分类商品
     Page<SkuEs> getCategorySkus(Integer page, Integer size, SkuEsQueryVo param);
+    // 更新商品热度
+    Boolean incrHotScore(Long skuId);
 }

@@ -4,11 +4,13 @@ import com.atguigu.ssyx.activity.mapper.ActivityInfoMapper;
 import com.atguigu.ssyx.activity.mapper.ActivityRuleMapper;
 import com.atguigu.ssyx.activity.mapper.ActivitySkuMapper;
 import com.atguigu.ssyx.activity.service.ActivityInfoService;
+import com.atguigu.ssyx.activity.service.CouponInfoService;
 import com.atguigu.ssyx.client.product.ProductFeignClient;
 import com.atguigu.ssyx.enums.ActivityType;
 import com.atguigu.ssyx.model.activity.ActivityInfo;
 import com.atguigu.ssyx.model.activity.ActivityRule;
 import com.atguigu.ssyx.model.activity.ActivitySku;
+import com.atguigu.ssyx.model.activity.CouponInfo;
 import com.atguigu.ssyx.model.product.SkuInfo;
 import com.atguigu.ssyx.vo.activity.ActivityRuleVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +45,8 @@ public class ActivityInfoServiceImpl extends ServiceImpl<ActivityInfoMapper, Act
     private ActivitySkuMapper activitySkuMapper;
     @Autowired
     private ProductFeignClient productFeignClient;
+    @Resource
+    private CouponInfoService couponInfoService;
 
     @Override
     public IPage<ActivityInfo> selectPage(Page<ActivityInfo> pageParam) {
@@ -132,6 +137,25 @@ public class ActivityInfoServiceImpl extends ServiceImpl<ActivityInfoMapper, Act
                 result.put(skuId, ruleList);
             }
         }
+        return result;
+    }
+
+    @Override
+    // 获取sku营销和优惠活动信息
+    public Map<String, Object> getSkuActivityAndCoupon(Long skuId, Long userId) {
+        Map<String, Object> result = new HashMap<>();
+        // 1.查询促销活动
+        List<ActivityRule> activityRuleList = activitySkuMapper.getActivityBySkuId(skuId);
+        if (!CollectionUtils.isEmpty(activityRuleList)) {
+            for (ActivityRule activityRule : activityRuleList) {
+                String ruleDesc = this.getRuleDesc(activityRule);
+                activityRule.setRuleDesc(ruleDesc);
+            }
+            result.put("activityRuleList", activityRuleList);
+        }
+        // 2.查询优惠活动
+        List<CouponInfo> couponInfoList = couponInfoService.findCouponInfo(skuId, userId);
+        result.put("couponInfoList", couponInfoList);
         return result;
     }
 

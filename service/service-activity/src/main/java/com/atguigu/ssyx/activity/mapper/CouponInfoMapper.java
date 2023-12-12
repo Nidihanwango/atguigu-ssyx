@@ -3,6 +3,9 @@ package com.atguigu.ssyx.activity.mapper;
 import com.atguigu.ssyx.model.activity.CouponInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,5 +17,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface CouponInfoMapper extends BaseMapper<CouponInfo> {
-
+    // 根据skuId, userId, categoryId获取商品优惠券
+    List<CouponInfo> selectCouponInfoList(@Param("skuId") Long skuId, @Param("userId") Long userId, @Param("categoryId") Long categoryId);
 }

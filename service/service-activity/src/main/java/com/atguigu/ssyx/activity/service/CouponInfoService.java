@@ -25,4 +25,6 @@ public interface CouponInfoService extends IService<CouponInfo> {
 
     //新增优惠券规则
     void saveCouponRule(CouponRuleVo couponRuleVo);
+    // 根据skuId和userId获取商品可用优惠券
+    List<CouponInfo> findCouponInfo(Long skuId, Long userId);
 }

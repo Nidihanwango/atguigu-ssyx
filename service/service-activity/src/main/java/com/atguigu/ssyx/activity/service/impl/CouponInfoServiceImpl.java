@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,5 +93,16 @@ public class CouponInfoServiceImpl extends ServiceImpl<CouponInfoMapper, CouponI
             item.setCouponId(couponRuleVo.getCouponId());
             couponRangeMapper.insert(item);
         });
+    }
+
+    @Override
+    public List<CouponInfo> findCouponInfo(Long skuId, Long userId) {
+        // 1.远程调用service-product服务,获取商品分类id
+        SkuInfo skuInfo = productFeignClient.getSku(skuId);
+        if (skuInfo == null) {
+            return new ArrayList<>();
+        }
+        // 2.多表联查获取商品优惠信息
+        return baseMapper.selectCouponInfoList(skuId, userId, skuInfo.getCategoryId());
     }
 }

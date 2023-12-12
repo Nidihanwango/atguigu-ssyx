@@ -187,4 +187,23 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
         List<SkuInfo> list = this.list(wrapper);
         return list;
     }
+
+    @Override
+    // 获取sku基础信息
+    public SkuInfoVo getSkuInfoVo(Long skuId) {
+        SkuInfoVo skuInfoVo = new SkuInfoVo();
+        // 1.获取skuInfo
+        SkuInfo skuInfo = this.getById(skuId);
+        BeanUtils.copyProperties(skuInfo, skuInfoVo);
+        // 2.获取skuImage
+        List<SkuImage> skuImages = skuImageService.list(new LambdaQueryWrapper<SkuImage>().eq(SkuImage::getSkuId, skuId));
+        skuInfoVo.setSkuImagesList(skuImages);
+        // 3.获取skuPoster
+        List<SkuPoster> skuPosters = skuPosterService.list(new LambdaQueryWrapper<SkuPoster>().eq(SkuPoster::getSkuId, skuId));
+        skuInfoVo.setSkuPosterList(skuPosters);
+        // 4.获取sku属性值
+        List<SkuAttrValue> skuAttrValues = skuAttrValueService.list(new LambdaQueryWrapper<SkuAttrValue>().eq(SkuAttrValue::getSkuId, skuId));
+        skuInfoVo.setSkuAttrValueList(skuAttrValues);
+        return skuInfoVo;
+    }
 }

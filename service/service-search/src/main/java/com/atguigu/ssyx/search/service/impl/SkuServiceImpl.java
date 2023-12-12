@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -21,6 +22,7 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,7 +33,8 @@ public class SkuServiceImpl implements SkuService {
     private ProductFeignClient productFeignClient;
     @Resource
     private ActivityFeignClient activityFeignClient;
-
+    @Resource
+    private RedisTemplate redisTemplate;
     @Override
     public void upperSku(Long skuId) {
         // 1.根据skuId获取sku信息
@@ -101,5 +104,25 @@ public class SkuServiceImpl implements SkuService {
             }
         }
         return pageModel;
+    }
+
+    /**
+     * 更新es中商品热度,为了避免大量的io操作,因此使用redis实现
+     * 每次热度增加,在redis中增加访问量,每增加10访问量更新一次es
+     */
+    @Override
+    public Boolean incrHotScore(Long skuId) {
+        // 1.定义key
+        String key = "HotScore";
+        // 2.在redis中记录访问量
+        Double score = redisTemplate.opsForZSet().incrementScore(key, "skuId:" + skuId, 1);
+        if (score % 10 == 0) {
+            // 3.满足规则,更新es
+            Optional<SkuEs> optional = skuRepository.findById(skuId);
+            SkuEs skuEs = optional.get();
+            skuEs.setHotScore(Math.round(score));
+            skuRepository.save(skuEs);
+        }
+        return true;
     }
 }
